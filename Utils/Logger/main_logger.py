@@ -1,6 +1,8 @@
 import logging
 import sys
 
+from Utils.ConfigReader.ConfigReader import read_config
+
 FORMATTER = logging.Formatter("%(asctime)s — %(name)s — %(levelname)s — %(funcName)s:%(lineno)d — %(message)s")
 
 
@@ -10,8 +12,12 @@ def get_console_handler():
     return console_handler
 
 def get_logger(logger_name):
+    logs_level = read_config("logs.level").get("level")
     logger = logging.getLogger(logger_name)
-    logger.setLevel(logging.INFO)
+    if logs_level == "DEBUG":
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.INFO)
     logger.addHandler(get_console_handler())
     logger.propagate = False
     return logger

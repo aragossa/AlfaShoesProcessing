@@ -16,21 +16,21 @@ class DbConnector:
         self.cursor = self.connection.cursor(buffered=True)
 
     def __get_config(self):
-        if self.db_name == 'origin':
-            return read_config('flow.origin')
+        if self.db_name == "origin":
+            return read_config("flow.origin")
         else:
-            return read_config('flow.buffer')
+            return read_config("flow.buffer")
 
     def get_query(self):
-        if self.table_name == 'items_history':
+        if self.table_name == "items_history":
             return ProcessingQueries.items_history_query
-        elif self.table_name == 'stw_modules_models_local':
+        elif self.table_name == "stw_modules_models_local":
             return ProcessingQueries.stw_modules_models_local_query
-        elif self.table_name == 'stw_modules_colors_local':
+        elif self.table_name == "stw_modules_colors_local":
             return ProcessingQueries.stw_modules_colors_local_query
-        elif self.table_name == 'stw_modules_podklads_local':
+        elif self.table_name == "stw_modules_podklads_local":
             return ProcessingQueries.stw_modules_podklads_local_query
-        elif self.table_name == 'stw_modules_sizes_local':
+        elif self.table_name == "stw_modules_sizes_local":
             return ProcessingQueries.stw_modules_sizes_local_query
 
     def get_data(self, cnx, cur):
@@ -43,6 +43,7 @@ class DbConnector:
         return items_list
 
     def get_items_list(self):
+
         cnx = mysql.connector.connect(**self.config)
         cur = cnx.cursor(buffered=True)
         log.info("Connect to db")

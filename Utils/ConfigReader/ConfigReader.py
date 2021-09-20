@@ -3,7 +3,7 @@ from configparser import ConfigParser
 
 
 def read_config(section):
-    filename = os.path.join('config.ini')
+    filename = os.path.join("config.ini")
     parser = ConfigParser()
     parser.read(filename)
     config = {}
@@ -11,5 +11,5 @@ def read_config(section):
         for param in parser.items(section):
             config[param[0]] = param[1]
     else:
-        raise Exception('Section {0} not found in the {1} file'.format(section, filename))
+        raise Exception("Section {0} not found in the {1} file".format(section, filename))
     return config

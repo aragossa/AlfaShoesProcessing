@@ -1,3 +1,6 @@
 /Reports/
 /.idea/
 config.ini
+/Tests/
+/tests.py
+/TempFolder/

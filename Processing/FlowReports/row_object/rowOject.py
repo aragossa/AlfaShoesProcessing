@@ -56,37 +56,37 @@ class RowObject:
         return datetime.fromtimestamp(timestamp).strftime("%d.%m.%Y")
 
     def create_dict_obj(self):
-        if self.table_name == 'items_history':
+        if self.table_name == "items_history":
             return {
-                'm_item_order': self.m_item_order,
-                'm_item_date_created': self.convert_to_date_string(self.m_item_date_created),
-                'm_item_comment': self.m_item_comment,
-                'step_id': self.step_id,
-                'date_start': self.convert_to_date_string(self.date_start),
-                'comment': self.comment,
-                'm_item_title': self.m_item_title,
-                'm_item_size': self.m_item_size,
-                'm_item_color': self.m_item_color,
-                'm_item_podklad': self.m_item_podklad,
-                'm_item_stopped': self.m_item_stopped,
-                'm_item_model': self.m_item_model,
+                "m_item_order": self.m_item_order,
+                "m_item_date_created": self.convert_to_date_string(self.m_item_date_created),
+                "m_item_comment": self.m_item_comment,
+                "step_id": self.step_id,
+                "date_start": self.convert_to_date_string(self.date_start),
+                "comment": self.comment,
+                "m_item_title": self.m_item_title,
+                "m_item_size": self.m_item_size,
+                "m_item_color": self.m_item_color,
+                "m_item_podklad": self.m_item_podklad,
+                "m_item_stopped": self.m_item_stopped,
+                "m_item_model": self.m_item_model,
             }
-        elif self.table_name == 'stw_modules_colors_local':
+        elif self.table_name == "stw_modules_colors_local":
             log.debug({
-                'm_item_title': self.m_item_title,
-                'm_item_lang': self.m_item_lang,
-                'm_item_visible': self.m_item_visible,
+                "m_item_title": self.m_item_title,
+                "m_item_lang": self.m_item_lang,
+                "m_item_visible": self.m_item_visible,
             })
             return {
-                'm_item_title': self.m_item_title,
-                'm_item_lang': self.m_item_lang,
-                'm_item_visible': self.m_item_visible,
+                "m_item_title": self.m_item_title,
+                "m_item_lang": self.m_item_lang,
+                "m_item_visible": self.m_item_visible,
             }
 
         else:
             return {
-                'm_item_title': self.m_item_title,
-                'm_item_lang': self.m_item_lang,
+                "m_item_title": self.m_item_title,
+                "m_item_lang": self.m_item_lang,
             }
 
     def insert_item(self):
@@ -96,7 +96,7 @@ class RowObject:
         self.items_list[self.m_item_id].update(self.create_dict_obj())
 
     def compare_step_id(self):
-        if self.items_list[self.m_item_id].get('step_id') < self.step_id:
+        if self.items_list[self.m_item_id].get("step_id") < self.step_id:
             self.update_item()
 
     def item_processing(self):
