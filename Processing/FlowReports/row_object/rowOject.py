@@ -25,6 +25,7 @@ class RowObject:
                  m_item_visible=None,
                  m_item_lang=None,
                  m_item_model=None,
+                 m_item_delete_date=None
                  ):
 
         self.m_item_id = m_item_id
@@ -44,6 +45,7 @@ class RowObject:
         self.m_item_visible = m_item_visible
         self.table_name = table_name
         self.m_item_model = m_item_model
+        self.m_item_delete_date = m_item_delete_date
 
     def check_items_list(self):
         if self.items_list.get(self.m_item_id):
@@ -53,7 +55,10 @@ class RowObject:
             return False
 
     def convert_to_date_string(self, timestamp):
-        return datetime.fromtimestamp(timestamp).strftime("%d.%m.%Y")
+        try:
+            return datetime.fromtimestamp(timestamp).strftime("%d.%m.%Y")
+        except TypeError:
+            return timestamp
 
     def create_dict_obj(self):
         if self.table_name == "items_history":
@@ -71,12 +76,23 @@ class RowObject:
                 "m_item_stopped": self.m_item_stopped,
                 "m_item_model": self.m_item_model,
             }
-        elif self.table_name == "stw_modules_colors_local":
-            log.debug({
+        elif self.table_name == "deleted_items_history":
+            return {
+                "m_item_order": self.m_item_order,
+                "m_item_date_created": self.convert_to_date_string(self.m_item_date_created),
+                "m_item_comment": self.m_item_comment,
+                "step_id": self.step_id,
+                "date_start": self.convert_to_date_string(self.date_start),
+                "comment": self.comment,
                 "m_item_title": self.m_item_title,
-                "m_item_lang": self.m_item_lang,
-                "m_item_visible": self.m_item_visible,
-            })
+                "m_item_size": self.m_item_size,
+                "m_item_color": self.m_item_color,
+                "m_item_podklad": self.m_item_podklad,
+                "m_item_stopped": self.m_item_stopped,
+                "m_item_model": self.m_item_model,
+                "m_item_delete_date": self.m_item_delete_date,
+            }
+        elif self.table_name == "stw_modules_colors_local":
             return {
                 "m_item_title": self.m_item_title,
                 "m_item_lang": self.m_item_lang,
