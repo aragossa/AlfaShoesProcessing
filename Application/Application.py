@@ -37,7 +37,7 @@ class ReportManager:
 
         self.upload_local_files(yandex_connector=ya,
                                 new_files=new_files)
-        # self.remove_local_files()
+        self.remove_local_files()
 
     def __flow_updater(self):
         flow_report = FlowReport()
