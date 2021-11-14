@@ -115,7 +115,7 @@ class YaDiskConnector:
                                    path_or_file=download_file_path)
                 downloaded_files.append(download_file_path)
 
-                self.move_file(src_path=src_file_path,
+                self.copy_file(src_path=src_file_path,
                                destination_file_path=destination_file_path,
                                overwrite=True)
             else:

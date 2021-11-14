@@ -15,4 +15,5 @@ if __name__ == "__main__":
     main()
     delta = datetime.datetime.now() - datetime_start
     print(f'Whole time: {delta}')
+    print('Задача выполнена можно закрыть окно')
 

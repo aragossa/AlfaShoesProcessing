@@ -40,11 +40,14 @@ class ExcelReport:
         log.debug('---------------------------')
         return changes
 
-    def __prepare_write_value(self, values, changes, col_num, values_flow, col_name, row_num, deleted=False):
+    def __prepare_write_value(self, values, changes, col_num, values_flow, col_name, row_num, m_item_id=None,
+                              deleted=False):
         log.debug(values)
         if col_num <= 14:
-            if col_name == 'step_id' and deleted == True:
+            if col_name == 'step_id' and deleted:
                 return 'удален'
+            elif col_name == 'date_start' and deleted:
+                return self.deleted_items_dict.get(m_item_id).get('m_item_delete_date')
             else:
                 return values.get(col_name)
         elif values.get('m_item_status') == 'новое изделие':
@@ -140,11 +143,14 @@ class ExcelReport:
                                                                               changes=changes,
                                                                               row_num=self.cur_write_row,
                                                                               deleted=deleted)
+
             ws.cell(self.cur_write_row, 7).value = self.__prepare_write_value(values=values, values_flow=values_flow,
                                                                               col_num=7,
                                                                               col_name='date_start',
                                                                               changes=changes,
-                                                                              row_num=self.cur_write_row)
+                                                                              row_num=self.cur_write_row,
+                                                                              m_item_id=m_item_id,
+                                                                              deleted=deleted)
             ws.cell(self.cur_write_row, 8).value = self.__prepare_write_value(values=values, values_flow=values_flow,
                                                                               col_num=8,
                                                                               col_name='comment',
@@ -264,8 +270,6 @@ class ExcelReport:
                                                                                changes=changes,
                                                                                row_num=self.cur_write_row)
 
-
-
             ws.cell(self.cur_write_row, 39).value = self.__prepare_write_value(values=values, values_flow=values_flow,
                                                                                col_num=39,
                                                                                col_name='flow_ready',
@@ -291,8 +295,6 @@ class ExcelReport:
                                                                                col_name='flow_ready',
                                                                                changes=changes,
                                                                                row_num=self.cur_write_row)
-
-
 
             ws.cell(self.cur_write_row, 46).value = self.__prepare_write_value(values=values, values_flow=values_flow,
                                                                                col_num=46,
