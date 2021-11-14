@@ -4,3 +4,4 @@ config.ini
 /Tests/
 /tests.py
 /TempFolder/
+/Application/logs/

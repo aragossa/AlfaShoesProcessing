@@ -1,3 +1,4 @@
+import datetime
 import logging
 import sys
 
@@ -11,6 +12,15 @@ def get_console_handler():
     console_handler.setFormatter(FORMATTER)
     return console_handler
 
+
+def get_file_handler():
+    file_name = "output"
+    open(f"logs/{file_name}.log", 'a').close()
+    file_handler = logging.FileHandler(f"logs/{file_name}.log")
+    file_handler.setFormatter(FORMATTER)
+    return file_handler
+
+
 def get_logger(logger_name):
     logs_level = read_config("logs.level").get("level")
     logger = logging.getLogger(logger_name)
@@ -19,5 +29,6 @@ def get_logger(logger_name):
     else:
         logger.setLevel(logging.INFO)
     logger.addHandler(get_console_handler())
+    logger.addHandler(get_file_handler())
     logger.propagate = False
     return logger

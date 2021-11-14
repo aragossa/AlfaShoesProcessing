@@ -70,6 +70,19 @@ class YaDiskConnector:
                     log.debug("dir is not archive")
         return max(dir_names).strftime("%Y%m%d")
 
+    def find_max_max(self):
+        list_dir = self.connection.listdir("/Учет Альфа/")
+        dates = []
+        for file in list_dir:
+            if file.type == "file":
+                try:
+                    log.debug(f"{file.name}")
+                    this_datetime = datetime.datetime.strptime(file.name.split('_')[0], "%Y%m%d")
+                    dates.append(this_datetime)
+                except ValueError:
+                    log.debug("file is not archive")
+        return max(dates).strftime("%Y%m%d")
+
     def find_files_in_dir(self, dir_name):
         files = []
         for elem in self.list_dir(dir_name=dir_name):
@@ -81,7 +94,7 @@ class YaDiskConnector:
         src_path = "/Учет Альфа/"
         files = self.find_files_in_dir(src_path)
         filenames = [elem.name for elem in files]
-        destination_folder_name = datetime.datetime.now().strftime('%Y%m%d')
+        destination_folder_name = self.find_max_max()
 
         destination_path = f"/Учет Альфа/Архив учета Альфа/{destination_folder_name}/"
         self.mkdir(destination_path)
@@ -109,6 +122,3 @@ class YaDiskConnector:
                 log.debug(f"File {file} skipped")
 
         return downloaded_files
-
-
-
