@@ -58,7 +58,8 @@ class ExcelReport:
             return get_excel_formula(col_num, row_num)
         else:
             log.debug('writing data')
-            # log.debug(values_flow)
+            log.debug(col_name)
+            log.debug(values_flow.get(col_name))
             log.debug(values_flow.get(col_name))
             # log.debug(col_name)
             # log.debug(values)
@@ -235,11 +236,12 @@ class ExcelReport:
                                                                                col_name='flow_color_filter',
                                                                                changes=changes,
                                                                                row_num=self.cur_write_row)
-            ws.cell(self.cur_write_row, 34).value = self.__prepare_write_value(values=values, values_flow=values_flow,
-                                                                               col_num=34,
-                                                                               col_name='flow_ordered',
-                                                                               changes=changes,
-                                                                               row_num=self.cur_write_row)
+            # ws.cell(self.cur_write_row, 34).value = self.__prepare_write_value(values=values, values_flow=values_flow,
+            #                                                                    col_num=34,
+            #                                                                    col_name='flow_ordered',
+            #                                                                    changes=changes,
+            #                                                                    row_num=self.cur_write_row)
+            ws.cell(self.cur_write_row, 34).value = 1
             ws.cell(self.cur_write_row, 35).value = self.__prepare_write_value(values=values, values_flow=values_flow,
                                                                                col_num=35,
                                                                                col_name='flow_canceled',
