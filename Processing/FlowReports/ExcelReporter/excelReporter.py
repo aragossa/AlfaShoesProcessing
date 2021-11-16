@@ -54,7 +54,7 @@ class ExcelReport:
             log.debug('writing formula for new m_item')
             log.debug(get_excel_formula(col_num, row_num))
             return get_excel_formula(col_num, row_num)
-        elif changes:
+        elif changes or col_num >= 30 or col_num <= 43:
             log.debug('writing formula')
             # log.debug(col_num)
             log.debug(get_excel_formula(col_num, row_num))
