@@ -15,7 +15,7 @@ def get_console_handler():
 
 def get_file_handler():
     file_name = "output"
-    open(f"logs/{file_name}.log", 'a').close()
+    open(f"logs/{file_name}.log", 'w').close()
     file_handler = logging.FileHandler(f"logs/{file_name}.log")
     file_handler.setFormatter(FORMATTER)
     return file_handler

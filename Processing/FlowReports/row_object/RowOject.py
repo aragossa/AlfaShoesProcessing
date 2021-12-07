@@ -166,6 +166,11 @@ class RowObject:
                 'flow_ean_13': self.flow_ean_13
             }
 
+        elif self.table_name == "flow_sheet_full":
+            return {
+                'flow_shoe_block': self.flow_shoe_block,
+            }
+
         else:
             return {
                 "m_item_title": self.m_item_title,

@@ -1,14 +1,3 @@
-"""
-        for elem in list(yandex_disk.listdir('Учет Альфа/')):
-            log.debug(f"-----------------------------------------------------------------")
-            log.debug(f"file {elem.file}")
-            log.debug(f"size {elem.size}")
-            log.debug(f"public_key {elem.public_key}")
-            log.debug(f"name {elem.name}")
-            log.debug(f"modified {elem.modified}")
-            log.debug(f"created {elem.created}")
-            log.debug(f"path {elem.path}")
-"""
 import datetime
 import os
 
@@ -29,6 +18,11 @@ class YaDiskConnector:
     def upload_file(self, src_path, destination_file_path, overwrite=False):
         log.info(f"Uploading file {src_path} to {destination_file_path}")
         self.connection.upload(path_or_file=src_path, dst_path=destination_file_path, overwrite=overwrite)
+        log.info("Done")
+
+    def delete_file(self, src_path):
+        log.info(f"Removing file {src_path}")
+        self.connection.remove(path=src_path, permanently=True)
         log.info("Done")
 
     def download_file(self, src_path, path_or_file):
@@ -90,7 +84,7 @@ class YaDiskConnector:
                 files.append(elem)
         return files
 
-    def archive_root_dir(self, processing_reports):
+    def download_root_dir(self, processing_reports):
         src_path = "/Учет Альфа/"
         files = self.find_files_in_dir(src_path)
         filenames = [elem.name for elem in files]
@@ -99,6 +93,7 @@ class YaDiskConnector:
         destination_path = f"/Учет Альфа/Архив учета Альфа/{destination_folder_name}/"
         self.mkdir(destination_path)
         downloaded_files = []
+        downloaded_files_clean = []
         for file in filenames:
             archive_report = False
             for report_name in processing_reports:
@@ -114,11 +109,13 @@ class YaDiskConnector:
                 self.download_file(src_path=src_file_path,
                                    path_or_file=download_file_path)
                 downloaded_files.append(download_file_path)
+                downloaded_files_clean.append(file)
 
                 self.copy_file(src_path=src_file_path,
                                destination_file_path=destination_file_path,
                                overwrite=True)
+
             else:
                 log.debug(f"File {file} skipped")
 
-        return downloaded_files
+        return downloaded_files, downloaded_files_clean
