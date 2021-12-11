@@ -33,8 +33,8 @@ class FlowReport:
 
         max_row = ws.max_row
         sheet_items_dict = {}
-        for row in ws.iter_rows(min_row=1, max_row=max_row, min_col=1, max_col=col_max):
-        # for row in range(1, max_row + 1):
+
+        for row in ws.iter_rows(min_row=1, max_row=max_row + 1, min_col=1, max_col=col_max):
             cur_row = []
             if row[0].value:
                 for cell in row:
