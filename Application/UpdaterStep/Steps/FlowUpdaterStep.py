@@ -9,7 +9,7 @@ log = get_logger("FlowUpdaterStep")
 class FlowUpdaterStep(UpdaterStep):
 
     @staticmethod
-    def run_flow_export(report_file_name):
+    def run_flow_export(report_file_name, date_file_prefix):
         log.info("Running Flow.Alfashoes report")
-        flow_report = FlowReport()
+        flow_report = FlowReport(date_file_prefix=date_file_prefix)
         flow_report.run_db_report(report_file_name=report_file_name)

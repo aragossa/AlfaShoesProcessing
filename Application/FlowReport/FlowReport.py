@@ -13,7 +13,8 @@ log = get_logger("FlowReport")
 
 
 class FlowReport:
-    def __init__(self):
+    def __init__(self, date_file_prefix):
+        self.date_file_prefix = date_file_prefix
         self.local_storage_path = read_config("local.storage").get("local_storage_path")
 
 
@@ -167,7 +168,8 @@ class FlowReport:
                 del excel_reporter
 
                 deleted_items_dict = self.__read_sheet_data(report=report, report_name='Удаленные заказы')
-                excel_reporter = ExcelReport(items_dict=items_dict, report_name=table_name, report=report)
+                excel_reporter = ExcelReport(items_dict=items_dict, report_name=table_name, report=report,
+                                             date_file_prefix=self.date_file_prefix)
                 excel_reporter.items_processing()
                 max_key = max(items_dict)
                 full_items_list = list(range(max_key + 1))
@@ -177,8 +179,13 @@ class FlowReport:
                                                   report=report,
                                                   flow_sheet_dict=flow_sheet_dict,
                                                   full_items_list=full_items_list,
-                                                  deleted_items_dict=deleted_items_dict)
+                                                  deleted_items_dict=deleted_items_dict,
+                                                  date_file_prefix=self.date_file_prefix)
                 excel_reporter_flow.items_processing()
+            else:
+                excel_reporter = ExcelReport(items_dict=items_dict, report_name=table_name, report=report,
+                                             date_file_prefix=self.date_file_prefix)
+                excel_reporter.items_processing()
 
         report.save(filename=report_file_name)
         del items_list

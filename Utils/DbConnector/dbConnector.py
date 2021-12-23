@@ -12,7 +12,8 @@ class DbConnector:
         self.db_name = db_name
         self.table_name = table_name
         self.config = self.__get_config()
-        self.connection = mysql.connector.connect(**self.config)
+        self.connection = mysql.connector.connect(**self.config, ssl_disabled=True)
+        # self.connection = mysql.connector.connect(user='alfaflow', password='bA6vC6aG2grV8d', host='77.222.52.68', database='alfaflow', ssl_disabled=True)
         self.cursor = self.connection.cursor(buffered=True)
 
     def __get_config(self):

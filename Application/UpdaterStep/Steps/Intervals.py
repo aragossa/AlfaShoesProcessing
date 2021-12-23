@@ -5,10 +5,18 @@ class Intervals:
                 'cells': None,
                 'intervals': [
                     {
-                        'start_row': 3,
-                        'stop_row': 50000,
-                        'start_col': 1,
-                        'stop_col': 19
+                        'read':
+                            {
+                                'start_row': 3,
+                                'stop_row': 50000,
+                                'start_col': 1,
+                                'stop_col': 19
+                            },
+                        'write':
+                            {
+                                'start_row': 3,
+                                'start_col': 1
+                            }
                     }
                 ]
             }
@@ -29,10 +37,18 @@ class Intervals:
                 ],
                 'intervals': [
                     {
-                        'start_row': 5,
-                        'stop_row': 50000,
-                        'start_col': 1,
-                        'stop_col': 49
+                        'read':
+                            {
+                                'start_row': 5,
+                                'stop_row': 50000,
+                                'start_col': 1,
+                                'stop_col': 49
+                            },
+                        'write':
+                            {
+                                'start_row': 4,
+                                'start_col': 1
+                            }
                     }
                 ]
             }
@@ -41,29 +57,64 @@ class Intervals:
             'Приемка рюкзаков': {
                 'cells': None,
                 'intervals': [
+
                     {
-                        'start_row': 3,
-                        'stop_row': 1000,
-                        'start_col': 1,
-                        'stop_col': 1,
+                        'read':
+                            {
+                                'start_row': 3,
+                                'stop_row': 1000,
+                                'start_col': 1,
+                                'stop_col': 1
+                            },
+                        'write':
+                            {
+                                'start_row': 3,
+                                'start_col': 1
+                            }
+                    },
+
+                    {
+                        'read':
+                            {
+                                'start_row': 3,
+                                'stop_row': 1000,
+                                'start_col': 3,
+                                'stop_col': 4
+                            },
+                        'write':
+                            {
+                                'start_row': 3,
+                                'start_col': 3
+                            }
+                    },
+
+                    {
+                        'read':
+                            {
+                                'start_row': 3,
+                                'stop_row': 1000,
+                                'start_col': 7,
+                                'stop_col': 10
+                            },
+                        'write':
+                            {
+                                'start_row': 3,
+                                'start_col': 7
+                            }
                     },
                     {
-                        'start_row': 3,
-                        'stop_row': 1000,
-                        'start_col': 3,
-                        'stop_col': 4
-                    },
-                    {
-                        'start_row': 3,
-                        'stop_row': 1000,
-                        'start_col': 7,
-                        'stop_col': 10
-                    },
-                    {
-                        'start_row': 3,
-                        'stop_row': 1000,
-                        'start_col': 15,
-                        'stop_col': 15
+                        'read':
+                            {
+                                'start_row': 3,
+                                'stop_row': 1000,
+                                'start_col': 15,
+                                'stop_col': 15
+                            },
+                        'write':
+                            {
+                                'start_row': 3,
+                                'start_col': 15
+                            }
                     }
                 ]
             }
@@ -78,11 +129,21 @@ class Intervals:
                 ],
                 'intervals': [
                     {
-                        'start_row': 2,
-                        'stop_row': 5008,
-                        'start_col': 1,
-                        'stop_col': 15
+                        'read':
+                            {
+                                'start_row': 2,
+                                'stop_row': 5000,
+                                'start_col': 1,
+                                'stop_col': 15
+                            },
+                        'write':
+                            {
+                                'start_row': 3,
+                                'start_col': 1
+                            }
                     }
+
+
                 ]
             }
         },
@@ -96,11 +157,21 @@ class Intervals:
                 ],
                 'intervals': [
                     {
-                        'start_row': 2,
-                        'stop_row': 508,
-                        'start_col': 1,
-                        'stop_col': 15
+                        'read':
+                            {
+                                'start_row': 2,
+                                'stop_row': 500,
+                                'start_col': 1,
+                                'stop_col': 15
+                            },
+                        'write':
+                            {
+                                'start_row': 3,
+                                'start_col': 1
+                            }
                     }
+
+
                 ]
             },
             'Справочник модели обуви': {
@@ -112,11 +183,21 @@ class Intervals:
                 ],
                 'intervals': [
                     {
-                        'start_row': 2,
-                        'stop_row': 508,
-                        'start_col': 1,
-                        'stop_col': 12
+                        'read':
+                            {
+                                'start_row': 2,
+                                'stop_row': 508,
+                                'start_col': 1,
+                                'stop_col': 12
+                            },
+                        'write':
+                            {
+                                'start_row': 3,
+                                'start_col': 1
+                            }
                     }
+
+
                 ]
             },
             'Справочник аксессуары': {
@@ -128,11 +209,21 @@ class Intervals:
                 ],
                 'intervals': [
                     {
-                        'start_row': 2,
-                        'stop_row': 508,
-                        'start_col': 1,
-                        'stop_col': 12
+                        'read':
+                            {
+                                'start_row': 2,
+                                'stop_row': 508,
+                                'start_col': 1,
+                                'stop_col': 12
+                            },
+                        'write':
+                            {
+                                'start_row': 3,
+                                'start_col': 1
+                            }
                     }
+
+
                 ]
             },
             'Цены ВБ': {
@@ -144,10 +235,18 @@ class Intervals:
                 ],
                 'intervals': [
                     {
-                        'start_row': 2,
-                        'stop_row': 999,
-                        'start_col': 1,
-                        'stop_col': 18
+                        'read':
+                            {
+                                'start_row': 2,
+                                'stop_row': 999,
+                                'start_col': 1,
+                                'stop_col': 18
+                            },
+                        'write':
+                            {
+                                'start_row': 3,
+                                'start_col': 1
+                            }
                     }
                 ]
             }

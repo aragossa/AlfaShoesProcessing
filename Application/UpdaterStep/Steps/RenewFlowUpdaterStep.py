@@ -30,7 +30,7 @@ class RenewFlowUpdaterStep(UpdaterStep):
                 new_files.update({'02_Приемка на склад': file})
 
     def prepare_renew_flow_values(self, report_file_name, report):
-        read_values = Intervals.acceptance_intervals.get('02_Приемка на склад')
+        read_values = Intervals.renew_flow_intervals.get('02_Приемка на склад')
         log.debug(f'opening {report_file_name}')
         data = openpyxl.load_workbook(filename=report_file_name, data_only=True, read_only=True)
         for sheet_name, params in read_values.items():
@@ -39,13 +39,13 @@ class RenewFlowUpdaterStep(UpdaterStep):
             report_sheet = report['Flow']
             for interval in params.get('intervals'):
                 excel_data = self.read_interval(worksheet=worksheet,
-                                                start_row=interval.get('start_row'),
-                                                stop_row=interval.get('stop_row'),
-                                                start_col=interval.get('start_col'),
-                                                stop_col=interval.get('stop_col'))
+                                                start_row=interval.get('read').get('start_row'),
+                                                stop_row=interval.get('read').get('stop_row'),
+                                                start_col=interval.get('read').get('start_col'),
+                                                stop_col=interval.get('read').get('stop_col'))
                 self.write_interval(worksheet=report_sheet,
-                                    start_row=interval.get('start_row'),
-                                    start_col=interval.get('start_col'),
+                                    start_row=interval.get('write').get('start_row'),
+                                    start_col=interval.get('write'),
                                     excel_data=excel_data)
         data.close()
 
@@ -57,3 +57,25 @@ class RenewFlowUpdaterStep(UpdaterStep):
         log.info(f"saving report {files.get('01_Flow')}")
         report.save(files.get('01_Flow'))
         report.close()
+
+    def clean_root_dir(self, files):
+        for file in files:
+            if '01_Flow' in file:
+                src_file = file.replace("TempFolder/", "")
+                prepared_file_name = src_file.replace(".xlsx", "_архив.xlsx")
+                destination_folder_name = prepared_file_name.split('_')[0]
+                destination_path = f"/Учет Альфа/Архив учета Альфа/{destination_folder_name}/"
+                destination_file_path = f"{destination_path}{prepared_file_name}"
+                self.ya.mkdir(destination_path)
+                self.ya.copy_file(src_path=f"/Учет Альфа/{src_file}",
+                                  destination_file_path=destination_file_path,
+                                  overwrite=True)
+
+                self.ya.delete_file(src_path=f"/Учет Альфа/{src_file}")
+
+    def upload_local_files(self, new_files):
+        for report_type, file in new_files.items():
+            if '01_Flow' in file:
+                clean_filename = file.replace('TempFolder/', '').replace('TempFolder\\', '')
+                self.ya.upload_file(src_path=file,
+                                    destination_file_path=f"/Учет Альфа/{clean_filename}")

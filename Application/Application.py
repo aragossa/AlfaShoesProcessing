@@ -1,4 +1,5 @@
 import sys
+import datetime
 
 from Application.FlowReport.ReportNames.ReportNames import FLOW_REPORT_NAMES, ACCEPTANCE_REPORT_NAMES, \
     FLOW_RENEW_REPORT_NAMES
@@ -16,26 +17,28 @@ class ReportManager:
         self.args = args
         self.local_storage_path = read_config("local.storage").get("local_storage_path")
 
-    def __choose_updater_type(self, step_num):
+    def __choose_updater_type(self, step_num, date_file_prefix):
         if step_num == 'step_1':
-            return FlowUpdaterStep()
+            return FlowUpdaterStep(date_file_prefix=date_file_prefix)
         elif step_num == 'step_2':
-            return AcceptanceUpdaterStep()
+            return AcceptanceUpdaterStep(date_file_prefix=date_file_prefix)
         elif step_num == 'step_3':
-            return RenewFlowUpdaterStep()
+            return RenewFlowUpdaterStep(date_file_prefix=date_file_prefix)
         else:
             pass
 
     def updater_step(self, step_num, processing_reports):
-        step_updater = self.__choose_updater_type(step_num=step_num)
+        date_file_prefix = datetime.datetime.now()
+        step_updater = self.__choose_updater_type(step_num=step_num, date_file_prefix=date_file_prefix)
         new_files = {}
         downloaded_files, downloaded_files_clean = step_updater.run_download_root_dir(
             processing_reports=processing_reports)
+
         step_updater.update_local_files(downloaded_files=downloaded_files,
                                         new_files=new_files)
 
         if step_num == 'step_1':
-            step_updater.run_flow_export(report_file_name=new_files.get('01_Flow'))
+            step_updater.run_flow_export(report_file_name=new_files.get('01_Flow'), date_file_prefix=date_file_prefix)
         elif step_num == 'step_2':
             acceptance_report = step_updater.download_acceptance_template()
             step_updater.run_acceptance_updater(files=new_files, acceptance_report=acceptance_report)
@@ -44,9 +47,10 @@ class ReportManager:
         else:
             downloaded_files_clean = {}
 
+
+        step_updater.clean_root_dir(files=downloaded_files_clean)
         step_updater.upload_local_files(new_files=new_files)
         step_updater.remove_local_files()
-        step_updater.clean_root_dir(files=downloaded_files_clean)
 
     def run(self):
         if len(self.args) == 1:

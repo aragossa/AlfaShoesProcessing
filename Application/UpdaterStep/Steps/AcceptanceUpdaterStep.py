@@ -1,3 +1,4 @@
+import datetime
 import os
 
 import openpyxl
@@ -37,14 +38,16 @@ class AcceptanceUpdaterStep(UpdaterStep):
                     self.write_cell_value(worksheet=report_sheet, col=cells.get('col'), row=cells.get('row'),
                                           value=value)
             for interval in params.get('intervals'):
+                log.debug(f"current_interval")
+                log.debug(f"{interval}")
                 excel_data = self.read_interval(worksheet=worksheet,
-                                                start_row=interval.get('start_row'),
-                                                stop_row=interval.get('stop_row'),
-                                                start_col=interval.get('start_col'),
-                                                stop_col=interval.get('stop_col'))
+                                                start_row=interval.get("read").get('start_row'),
+                                                stop_row=interval.get("read").get('stop_row'),
+                                                start_col=interval.get("read").get('start_col'),
+                                                stop_col=interval.get("read").get('stop_col'))
                 self.write_interval(worksheet=report_sheet,
-                                    start_row=interval.get('start_row'),
-                                    start_col=interval.get('start_col'),
+                                    start_row=interval.get("write").get('start_row'),
+                                    start_col=interval.get("write").get('start_col'),
                                     excel_data=excel_data)
         data.close()
 
@@ -65,4 +68,24 @@ class AcceptanceUpdaterStep(UpdaterStep):
         report.save(acceptance_report)
         report.close()
 
+    def clean_root_dir(self, files):
+        for file in files:
+            if '02_Приемка на склад' in file:
+                src_file = file.replace("TempFolder/", "")
+                prepared_file_name = src_file.replace(".xlsx", "_архив.xlsx")
+                destination_folder_name = prepared_file_name.split('_')[0]
+                destination_path = f"/Учет Альфа/Архив учета Альфа/{destination_folder_name}/"
+                destination_file_path = f"{destination_path}{prepared_file_name}"
+                self.ya.mkdir(destination_path)
+                self.ya.copy_file(src_path=f"/Учет Альфа/{src_file}",
+                                  destination_file_path=destination_file_path,
+                                  overwrite=True)
 
+                self.ya.delete_file(src_path=f"/Учет Альфа/{src_file}")
+
+    def upload_local_files(self, new_files):
+        for report_type, file in new_files.items():
+            if '02_Приемка на склад' in file:
+                clean_filename = file.replace('TempFolder/', '').replace('TempFolder\\', '')
+                self.ya.upload_file(src_path=file,
+                                    destination_file_path=f"/Учет Альфа/{clean_filename}")

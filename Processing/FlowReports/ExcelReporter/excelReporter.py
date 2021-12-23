@@ -10,7 +10,7 @@ log = get_logger("ExcelReport")
 
 class ExcelReport:
     def __init__(self, items_dict, report_name, report, flow_sheet_dict=None, full_items_list=None,
-                 deleted_items_dict=None):
+                 deleted_items_dict=None, date_file_prefix=None):
         self.deleted_items_dict = deleted_items_dict
         self.full_items_list = full_items_list
         self.items_dict = items_dict
@@ -18,6 +18,7 @@ class ExcelReport:
         self.cur_write_row = 2
         self.report_name = report_name
         self.report = report
+        self.date_file_prefix = date_file_prefix
 
     def get_header_values(self):
         if self.report_name == "items_history":
@@ -36,8 +37,8 @@ class ExcelReport:
             worksheet = self.report_name
         ws = self.report[worksheet]
         if worksheet == 'Актуальная выгрузка':
-            ws.cell(1, 16).value = datetime.datetime.now().strftime("%d.%m.%Y")
-            ws.cell(1, 17).value = datetime.datetime.now().strftime("%H:%M")
+            ws.cell(1, 16).value = self.date_file_prefix.strftime("%d.%m.%Y")
+            ws.cell(1, 17).value = self.date_file_prefix.strftime("%H:%M")
 
         log.info(f"Writing report {self.report_name}")
         if worksheet == 'Flow':
@@ -46,12 +47,15 @@ class ExcelReport:
         if worksheet != 'Flow':
             for m_item_id, values in self.items_dict.items():
                 if m_item_id != 'm_item_id':
+                    if self.report_name == 'stw_modules_colors_local':
+                        log.debug(f"stw_modules_colors_local {m_item_id}")
+                        log.debug(f"{values}")
                     log.debug(worksheet)
                     ws = self.write_row(ws=ws,
-                                             m_item_id=m_item_id,
-                                             values=values,
-                                             report_name=self.report_name,
-                                             cur_write_row=self.cur_write_row)
+                                        m_item_id=m_item_id,
+                                        values=values,
+                                        report_name=self.report_name,
+                                        cur_write_row=self.cur_write_row)
         else:
             for m_item_id in self.full_items_list:
                 if m_item_id != 'm_item_id':
@@ -60,26 +64,25 @@ class ExcelReport:
                     log.debug(self.deleted_items_dict.get(m_item_id))
 
                     if self.deleted_items_dict.get(m_item_id):
-                        m_item_delete_date=self.deleted_items_dict.get(m_item_id).get('m_item_delete_date')
+                        m_item_delete_date = self.deleted_items_dict.get(m_item_id).get('m_item_delete_date')
                         ws = self.write_row(ws=ws,
-                                                 m_item_id=m_item_id,
-                                                 values=self.deleted_items_dict.get(m_item_id),
-                                                 report_name=self.report_name,
-                                                 cur_write_row=self.cur_write_row,
-                                                 values_flow=self.deleted_items_dict.get(m_item_id),
-                                                 deleted=True,
-                                                 m_item_delete_date=m_item_delete_date)
+                                            m_item_id=m_item_id,
+                                            values=self.deleted_items_dict.get(m_item_id),
+                                            report_name=self.report_name,
+                                            cur_write_row=self.cur_write_row,
+                                            values_flow=self.deleted_items_dict.get(m_item_id),
+                                            deleted=True,
+                                            m_item_delete_date=m_item_delete_date)
 
                     elif self.items_dict.get(m_item_id):
                         ws = self.write_row(ws=ws,
-                                                 m_item_id=m_item_id,
-                                                 values=self.items_dict.get(m_item_id),
-                                                 report_name=self.report_name,
-                                                 cur_write_row=self.cur_write_row,
-                                                 values_flow=self.flow_sheet_dict.get(m_item_id))
+                                            m_item_id=m_item_id,
+                                            values=self.items_dict.get(m_item_id),
+                                            report_name=self.report_name,
+                                            cur_write_row=self.cur_write_row,
+                                            values_flow=self.flow_sheet_dict.get(m_item_id))
 
         log.info(f"Saving report {self.report_name}")
-
 
     def __detect_changes(self, values):
         log.debug(values)
@@ -383,15 +386,19 @@ class ExcelReport:
                                                                                row_num=self.cur_write_row)
 
         elif self.report_name == "stw_modules_colors_local":
-            ws.cell(self.cur_write_row, 1).value = m_item_id
-            ws.cell(self.cur_write_row, 2).value = values.get("m_item_lang")
-            ws.cell(self.cur_write_row, 3).value = values.get("m_item_title")
-            ws.cell(self.cur_write_row, 4).value = values.get("m_item_visible")
+            log.debug(
+                f'writing to excel colors {self.report_name} {m_item_id}, {values.get("m_item_lang")}, {values.get("m_item_title")}, {values.get("m_item_visible")}')
+            log.debug(f"to row {self.cur_write_row}")
+            ws.cell(self.cur_write_row, 3).value = m_item_id
+            ws.cell(self.cur_write_row, 4).value = values.get("m_item_lang")
+            ws.cell(self.cur_write_row, 5).value = values.get("m_item_title")
+            ws.cell(self.cur_write_row, 6).value = values.get("m_item_visible")
         else:
+            log.debug(
+                f'writing to excel {self.report_name} {m_item_id} {values.get("m_item_lang")} {values.get("m_item_title")}')
+            log.debug(f"to row {self.cur_write_row}")
             ws.cell(self.cur_write_row, 1).value = m_item_id
             ws.cell(self.cur_write_row, 2).value = values.get("m_item_lang")
             ws.cell(self.cur_write_row, 3).value = values.get("m_item_title")
         self.cur_write_row += 1
         return ws
-
-

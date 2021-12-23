@@ -84,38 +84,38 @@ class YaDiskConnector:
                 files.append(elem)
         return files
 
-    def download_root_dir(self, processing_reports):
-        src_path = "/Учет Альфа/"
-        files = self.find_files_in_dir(src_path)
-        filenames = [elem.name for elem in files]
-        destination_folder_name = self.find_max_max()
-
-        destination_path = f"/Учет Альфа/Архив учета Альфа/{destination_folder_name}/"
-        self.mkdir(destination_path)
-        downloaded_files = []
-        downloaded_files_clean = []
-        for file in filenames:
-            archive_report = False
-            for report_name in processing_reports:
-                if report_name in file:
-                    archive_report = True
-            if archive_report:
-                log.debug(f"Processing file {file}")
-                prepared_file_name = file.replace(".xlsx", "_архив.xlsx")
-                src_file_path = f"{src_path}{file}"
-                destination_file_path = f"{destination_path}{prepared_file_name}"
-
-                download_file_path = os.path.join(self.local_storage_path, prepared_file_name)
-                self.download_file(src_path=src_file_path,
-                                   path_or_file=download_file_path)
-                downloaded_files.append(download_file_path)
-                downloaded_files_clean.append(file)
-
-                self.copy_file(src_path=src_file_path,
-                               destination_file_path=destination_file_path,
-                               overwrite=True)
-
-            else:
-                log.debug(f"File {file} skipped")
-
-        return downloaded_files, downloaded_files_clean
+    # def download_root_dir(self, processing_reports):
+    #     src_path = "/Учет Альфа/"
+    #     files = self.find_files_in_dir(src_path)
+    #     filenames = [elem.name for elem in files]
+    #     destination_folder_name = self.find_max_max()
+    #
+    #     destination_path = f"/Учет Альфа/Архив учета Альфа/{destination_folder_name}/"
+    #     self.mkdir(destination_path)
+    #     downloaded_files = []
+    #     downloaded_files_clean = []
+    #     for file in filenames:
+    #         archive_report = False
+    #         for report_name in processing_reports:
+    #             if report_name in file:
+    #                 archive_report = True
+    #         if archive_report:
+    #             log.debug(f"Processing file {file}")
+    #             prepared_file_name = file.replace(".xlsx", "_архив.xlsx")
+    #             src_file_path = f"{src_path}{file}"
+    #             destination_file_path = f"{destination_path}{prepared_file_name}"
+    #
+    #             download_file_path = os.path.join(self.local_storage_path, prepared_file_name)
+    #             self.download_file(src_path=src_file_path,
+    #                                path_or_file=download_file_path)
+    #             downloaded_files.append(download_file_path)
+    #             downloaded_files_clean.append(file)
+    #
+    #             # self.copy_file(src_path=src_file_path,
+    #             #                destination_file_path=destination_file_path,
+    #             #                overwrite=True)
+    #
+    #         else:
+    #             log.debug(f"File {file} skipped")
+    #
+    #     return downloaded_files, downloaded_files_clean

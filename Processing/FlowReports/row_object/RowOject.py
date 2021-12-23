@@ -46,7 +46,8 @@ class RowObject:
                  flow_order_comment=None,
                  flow_barcode=None,
                  flow_control_digit=None,
-                 flow_ean_13=None
+                 flow_ean_13=None,
+                 flow_sheet_full=None
                  ):
 
         self.m_item_id = m_item_id

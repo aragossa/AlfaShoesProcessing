@@ -1,4 +1,7 @@
 from Processing.FlowReports.row_object.RowOject import RowObject
+from Utils.Logger.main_logger import get_logger
+
+log = get_logger("RowObjectParser")
 
 
 class RowObjectParser:
@@ -45,6 +48,7 @@ class RowObjectParser:
             )
 
         elif table_name == "stw_modules_colors_local":
+            log.debug(f"result query: row[0] is {row[0]}, row[1] is {row[1]}, row[2] is {row[2]}, row[3] is {row[3]}")
             return RowObject(
                 m_item_id='' if row[0] is None else row[0],
                 table_name=table_name,
