@@ -27,12 +27,24 @@ class Intervals:
             'Flow': {
                 'cells': [
                     {
-                        'col': 51,
-                        'row': 3,
+                        'read': {
+                            'col': 51,
+                            'row': 3,
+                        },
+                        'write': {
+                            'col': 51,
+                            'row': 2,
+                        }
                     },
                     {
-                        'col': 52,
-                        'row': 3,
+                        'read': {
+                            'col': 52,
+                            'row': 3,
+                        },
+                        'write': {
+                            'col': 52,
+                            'row': 2,
+                        }
                     }
                 ],
                 'intervals': [
@@ -123,9 +135,16 @@ class Intervals:
             'Номенклатуры ВБ': {
                 'cells': [
                     {
-                        'col': 17,
-                        'row': 1,
+                        'read': {
+                            'col': 16,
+                            'row': 1,
+                        },
+                        'write': {
+                            'col': 16,
+                            'row': 2,
+                        }
                     }
+
                 ],
                 'intervals': [
                     {
@@ -139,10 +158,9 @@ class Intervals:
                         'write':
                             {
                                 'start_row': 3,
-                                'start_col': 1
+                                'start_col': 2
                             }
                     }
-
 
                 ]
             }
@@ -151,8 +169,14 @@ class Intervals:
             'Справочник кож': {
                 'cells': [
                     {
-                        'col': 10,
-                        'row': 1,
+                        'read': {
+                            'col': 10,
+                            'row': 1,
+                        },
+                        'write': {
+                            'col': 10,
+                            'row': 2,
+                        }
                     }
                 ],
                 'intervals': [
@@ -171,14 +195,19 @@ class Intervals:
                             }
                     }
 
-
                 ]
             },
             'Справочник модели обуви': {
                 'cells': [
                     {
-                        'col': 14,
-                        'row': 1,
+                        'read': {
+                            'col': 14,
+                            'row': 1,
+                        },
+                        'write': {
+                            'col': 14,
+                            'row': 2,
+                        }
                     }
                 ],
                 'intervals': [
@@ -196,15 +225,20 @@ class Intervals:
                                 'start_col': 1
                             }
                     }
-
 
                 ]
             },
             'Справочник аксессуары': {
                 'cells': [
                     {
-                        'col': 14,
-                        'row': 1,
+                        'read': {
+                            'col': 14,
+                            'row': 1,
+                        },
+                        'write': {
+                            'col': 14,
+                            'row': 2,
+                        }
                     }
                 ],
                 'intervals': [
@@ -223,14 +257,19 @@ class Intervals:
                             }
                     }
 
-
                 ]
             },
             'Цены ВБ': {
                 'cells': [
                     {
-                        'col': 20,
-                        'row': 1,
+                        'read': {
+                            'col': 20,
+                            'row': 1,
+                        },
+                        'write': {
+                            'col': 21,
+                            'row': 2,
+                        }
                     }
                 ],
                 'intervals': [
@@ -245,7 +284,7 @@ class Intervals:
                         'write':
                             {
                                 'start_row': 3,
-                                'start_col': 1
+                                'start_col': 2
                             }
                     }
                 ]

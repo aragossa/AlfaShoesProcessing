@@ -1,4 +1,3 @@
-
 def get_excel_formula(col_num, row_num):
     excel_formulas = {
         15: f'=IF(VLOOKUP($M{row_num},stw_modules_models_local,1,1)<>$M{row_num},"В системе нет такой модели!",IF(VLOOKUP($M{row_num},stw_modules_models_local,6,1)<>0,"Указать колодку",""))',
@@ -26,7 +25,9 @@ def get_excel_formula(col_num, row_num):
 
         46: f'=IF($F{row_num}="удален","удален",IF(AND($AR{row_num}="",$AS{row_num}="",$E{row_num}=0,$H{row_num}=0),"",($AR{row_num}&" "&$AS{row_num}&" "&IF($E{row_num}=0,"",$E{row_num})&" "&IF($H{row_num}=0,"",$H{row_num}))))',
         47: f'=IF($F{row_num}="удален","удален",IF(LEN($A{row_num})=3,"200000000"&$A{row_num},IF(LEN($A{row_num})=4,"20000000"&$A{row_num},IF(LEN($A{row_num})=5,"2000000"&$A{row_num},IF(LEN($A{row_num})=6,"200000"&$A{row_num},0)))))',
-        48: '=IF($F%s="удален","удален",MOD(10-MOD(SUM(MID($AU%s,{1,2,3,4,5,6,7,8,9,10,11,12},1)*{1,3,1,3,1,3,1,3,1,3,1,3}),10),10))' % (row_num, row_num),
-        49: f'=IF($F{row_num}="удален","удален",$AU{row_num}&$AV{row_num})'
+        48: '=IF($F%s="удален","удален",MOD(10-MOD(SUM(MID($AU%s,{1,2,3,4,5,6,7,8,9,10,11,12},1)*{1,3,1,3,1,3,1,3,1,3,1,3}),10),10))' % (
+        row_num, row_num),
+        49: f'=IF($F{row_num}="удален","удален",$AU{row_num}&$AV{row_num})',
+        51: f'=IF($F{row_num}="удален","Изделие удалено",IF(VLOOKUP($A{row_num},актуальная_выгрузка,1,1)<>$A{row_num},"",IF(OR(VLOOKUP($A{row_num},актуальная_выгрузка,20,1)<>"",VLOOKUP($A{row_num},актуальная_выгрузка,21,1)<>"",VLOOKUP($A{row_num},актуальная_выгрузка,22,1)<>"",VLOOKUP($A{row_num},актуальная_выгрузка,23,1)<>"",VLOOKUP($A{row_num},актуальная_выгрузка,24,1)<>"",VLOOKUP($A{row_num},актуальная_выгрузка,25,1)<>""),VLOOKUP($A{row_num},актуальная_выгрузка,20,1)&" "&VLOOKUP($A{row_num},актуальная_выгрузка,21,1)&" "&VLOOKUP($A{row_num},актуальная_выгрузка,22,1)&" "&VLOOKUP($A{row_num},актуальная_выгрузка,23,1)&" "&VLOOKUP($A{row_num},актуальная_выгрузка,24,1)&" "&VLOOKUP($A{row_num},актуальная_выгрузка,25,1),"")))'
     }
     return excel_formulas.get(col_num)

@@ -147,7 +147,7 @@ class UpdaterStep:
         return excel_data
 
     def write_interval(self, worksheet, start_row, start_col, excel_data):
-        log.debug('writing intervals values')
+        log.debug(f'writing intervals values {worksheet}')
         row = start_row
         for rows in excel_data:
             log.debug(rows)

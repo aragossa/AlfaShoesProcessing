@@ -1,6 +1,5 @@
 import datetime
 
-from Processing.FlowReports.ExcelReporter.utils.RowWriter import RowWriter
 from Processing.FlowReports.ExcelReporter.utils.formulas import get_excel_formula
 from Processing.FlowReports.tables_headers.headers import Headers
 from Utils.Logger.main_logger import get_logger
@@ -382,6 +381,11 @@ class ExcelReport:
             ws.cell(self.cur_write_row, 49).value = self.__prepare_write_value(values=values, values_flow=values_flow,
                                                                                col_num=49,
                                                                                col_name='flow_ean_13',
+                                                                               changes=changes,
+                                                                               row_num=self.cur_write_row)
+            ws.cell(self.cur_write_row, 51).value = self.__prepare_write_value(values=values, values_flow=values_flow,
+                                                                               col_num=51,
+                                                                               col_name='none',
                                                                                changes=changes,
                                                                                row_num=self.cur_write_row)
 
