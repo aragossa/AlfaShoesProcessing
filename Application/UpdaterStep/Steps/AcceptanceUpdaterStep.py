@@ -40,6 +40,30 @@ class AcceptanceUpdaterStep(UpdaterStep):
 
         return downloaded_files, downloaded_files_clean
 
+    def download_acceptance_archive(self):
+        archive_dirs = self.ya.find_archive_dirs()
+        acceptance_filepath = None
+        acceptance_dirpath = None
+        for curr_dir in archive_dirs:
+            curr_file_name = self.ya.find_max_report(report_name='02_Приемка на склад', dir_name=curr_dir)
+            if curr_file_name is not None:
+                if acceptance_filepath is not None:
+                    exist_file_change_date = f"{acceptance_filepath.split('_')[0]}_{acceptance_filepath.split('_')[1]}"
+                    exist_this_datetime = datetime.datetime.strptime(exist_file_change_date, "%Y%m%d_%H%M")
+
+                    found_file_change_date = f"{curr_file_name.split('_')[0]}_{curr_file_name.split('_')[1]}"
+                    found_this_datetime = datetime.datetime.strptime(found_file_change_date, "%Y%m%d_%H%M")
+                    if found_this_datetime > exist_this_datetime:
+                        acceptance_filepath = curr_file_name
+                        acceptance_dirpath = curr_dir
+                else:
+                    acceptance_filepath = curr_file_name
+                    acceptance_dirpath = curr_dir
+        src_file = f'{acceptance_dirpath}/{acceptance_filepath}'
+        dst_file = os.path.join('TempFolder', acceptance_filepath)
+        self.ya.download_file(src_path=src_file, path_or_file=dst_file)
+        return dst_file
+
     def update_local_files(self, downloaded_files, new_files):
         for file in downloaded_files:
             if '02_Приемка на склад' in file:
@@ -113,10 +137,12 @@ class AcceptanceUpdaterStep(UpdaterStep):
         log.debug(f'{worksheet}, {col}, {row}, {value}')
         worksheet.cell(row=row, column=col).value = value
 
-    def run_acceptance_updater(self, files, acceptance_report):
+    def run_acceptance_updater(self, files, acceptance_report, acceptance_report_archive):
         log.debug(f'opening {acceptance_report}')
         report = openpyxl.load_workbook(filename=acceptance_report)
         log.debug(f'{files}')
+        updated_file = files
+        updated_file.update({'02_Приемка на склад': acceptance_report_archive})
         for report_name, report_file_name in files.items():
             self.prepare_acceptance_values(report_name=report_name, report_file_name=report_file_name, report=report)
         log.info(f'saving report {acceptance_report}')

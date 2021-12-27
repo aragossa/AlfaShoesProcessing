@@ -42,18 +42,21 @@ class ReportManager:
             step_updater.clean_root_dir(files=downloaded_files_clean)
             step_updater.upload_local_files(new_files=new_files)
         elif step_num == 'step_2':
+            acceptance_report_archive = step_updater.download_acceptance_archive()
             acceptance_report = step_updater.download_acceptance_template()
             log.debug(f'new_files {new_files}')
             log.debug(f'acceptance_report {acceptance_report}')
-            step_updater.run_acceptance_updater(files=new_files, acceptance_report=acceptance_report)
-            step_updater.clean_root_dir(files=downloaded_files_clean)
+            step_updater.run_acceptance_updater(files=new_files,
+                                                acceptance_report=acceptance_report,
+                                                acceptance_report_archive=acceptance_report_archive)
+            # step_updater.clean_root_dir(files=downloaded_files_clean)
             step_updater.upload_local_files(acceptance_report=acceptance_report)
         elif step_num == 'step_3':
             step_updater.run_renew_flow_updater(files=new_files)
             step_updater.clean_root_dir(files=downloaded_files_clean)
             step_updater.upload_local_files(new_files=new_files)
 
-        step_updater.remove_local_files()
+        # step_updater.remove_local_files()
 
     def run(self):
         if len(self.args) == 1:

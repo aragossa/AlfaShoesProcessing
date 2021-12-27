@@ -51,7 +51,7 @@ class YaDiskConnector:
     def list_dir(self, dir_name):
         return self.connection.listdir({dir_name})
 
-    def find_max_dir(self):
+    def find_archive_dirs(self):
         list_dir = self.connection.listdir("/Учет Альфа/Архив учета Альфа/")
         dir_names = []
         for dir in list_dir:
@@ -59,10 +59,33 @@ class YaDiskConnector:
                 try:
                     log.debug(f"{dir.name}")
                     this_datetime = datetime.datetime.strptime(dir.name, "%Y%m%d")
-                    dir_names.append(this_datetime)
+                    log.debug(this_datetime)
+                    dir_names.append(f"/Учет Альфа/Архив учета Альфа/{dir.name}")
                 except ValueError:
                     log.debug("dir is not archive")
-        return max(dir_names).strftime("%Y%m%d")
+        return dir_names
+
+    def find_max_report(self, report_name, dir_name):
+        list_dir = self.connection.listdir(dir_name)
+        file_name = None
+        for file in list_dir:
+            if (file.type == "file") and (report_name in file.name):
+                try:
+                    log.debug(f"{file.name}")
+                    file_change_date = f"{file.name.split('_')[0]}_{file.name.split('_')[1]}"
+                    log.debug(file_change_date)
+                    this_datetime = datetime.datetime.strptime(file_change_date, "%Y%m%d_%H%M")
+                    if file_name is not None:
+                        exist_file_change_date = f"{file_name.name.split('_')[0]}_{file_name.name.split('_')[1]}"
+                        log.debug(exist_file_change_date)
+                        exist_this_datetime = datetime.datetime.strptime(exist_file_change_date, "%Y%m%d_%H%M")
+                        if this_datetime > exist_this_datetime:
+                            file_name = file.name
+                    else:
+                        file_name = file.name
+                except ValueError:
+                    log.debug("file is not archive")
+        return file_name
 
     def find_max_max(self):
         list_dir = self.connection.listdir("/Учет Альфа/")
@@ -83,39 +106,3 @@ class YaDiskConnector:
             if elem.type == 'file':
                 files.append(elem)
         return files
-
-    # def download_root_dir(self, processing_reports):
-    #     src_path = "/Учет Альфа/"
-    #     files = self.find_files_in_dir(src_path)
-    #     filenames = [elem.name for elem in files]
-    #     destination_folder_name = self.find_max_max()
-    #
-    #     destination_path = f"/Учет Альфа/Архив учета Альфа/{destination_folder_name}/"
-    #     self.mkdir(destination_path)
-    #     downloaded_files = []
-    #     downloaded_files_clean = []
-    #     for file in filenames:
-    #         archive_report = False
-    #         for report_name in processing_reports:
-    #             if report_name in file:
-    #                 archive_report = True
-    #         if archive_report:
-    #             log.debug(f"Processing file {file}")
-    #             prepared_file_name = file.replace(".xlsx", "_архив.xlsx")
-    #             src_file_path = f"{src_path}{file}"
-    #             destination_file_path = f"{destination_path}{prepared_file_name}"
-    #
-    #             download_file_path = os.path.join(self.local_storage_path, prepared_file_name)
-    #             self.download_file(src_path=src_file_path,
-    #                                path_or_file=download_file_path)
-    #             downloaded_files.append(download_file_path)
-    #             downloaded_files_clean.append(file)
-    #
-    #             # self.copy_file(src_path=src_file_path,
-    #             #                destination_file_path=destination_file_path,
-    #             #                overwrite=True)
-    #
-    #         else:
-    #             log.debug(f"File {file} skipped")
-    #
-    #     return downloaded_files, downloaded_files_clean

@@ -64,7 +64,7 @@ class RenewFlowUpdaterStep(UpdaterStep):
         for sheet_name, params in read_values.items():
             log.debug(sheet_name)
             worksheet = data[sheet_name]
-            report_sheet = report['Flow']
+            report_sheet = report['Сдано на склад']
             for interval in params.get('intervals'):
                 excel_data = self.read_interval(worksheet=worksheet,
                                                 start_row=interval.get('read').get('start_row'),
@@ -74,7 +74,7 @@ class RenewFlowUpdaterStep(UpdaterStep):
                 log.debug(excel_data)
                 self.write_interval(worksheet=report_sheet,
                                     start_row=interval.get('write').get('start_row'),
-                                    start_col=interval.get('write'),
+                                    start_col=interval.get('write').get('start_col'),
                                     excel_data=excel_data)
         data.close()
 
@@ -91,16 +91,15 @@ class RenewFlowUpdaterStep(UpdaterStep):
         for file in files:
             if '01_Flow' in file:
                 src_file = file.replace("TempFolder/", "")
-                prepared_file_name = src_file.replace(".xlsx", "_архив.xlsx")
-                destination_folder_name = prepared_file_name.split('_')[0]
-                destination_path = f"/Учет Альфа/Архив учета Альфа/{destination_folder_name}/"
-                destination_file_path = f"{destination_path}{prepared_file_name}"
-                self.ya.mkdir(destination_path)
-                self.ya.copy_file(src_path=f"/Учет Альфа/{src_file}",
-                                  destination_file_path=destination_file_path,
-                                  overwrite=True)
-
                 self.ya.delete_file(src_path=f"/Учет Альфа/{src_file}")
+            elif '02_Приемка на склад' in file:
+                src_file = file.replace("TempFolder/", "")
+                src_file_date = src_file.split('_')[0]
+                dst_dir_name = f"/Учет Альфа/Архив учета Альфа/{src_file_date}"
+                updated_file_name = src_file.replace('.xlsx', '_архив.xlsx')
+                self.ya.mkdir(dst_dir_name)
+                self.ya.move_file(src_path=f"/Учет Альфа/{src_file}",
+                                  destination_file_path=f"{dst_dir_name}/{updated_file_name}")
 
     def upload_local_files(self, new_files):
         for report_type, file in new_files.items():
@@ -108,3 +107,30 @@ class RenewFlowUpdaterStep(UpdaterStep):
                 clean_filename = file.replace('TempFolder/', '').replace('TempFolder\\', '')
                 self.ya.upload_file(src_path=file,
                                     destination_file_path=f"/Учет Альфа/{clean_filename}")
+
+    def find_max_row(self, worksheet, start_row):
+        max_row = None
+        for row in worksheet.iter_rows(min_row=start_row):
+            log.debug(row[0].value)
+            log.debug(f'{row[0].value == None}')
+            if row[0].value == None:
+                max_row = row[0].row
+                break
+        if max_row is None:
+            max_row = worksheet.max_row
+        return max_row
+
+    def write_interval(self, worksheet, start_row, start_col, excel_data):
+        log.debug('writing intervals values')
+        row = self.find_max_row(worksheet=worksheet, start_row=start_row)
+        log.debug(f'found max row {row}')
+        for rows in excel_data:
+            log.debug(rows)
+            col = start_col
+            log.debug(f'writing to {worksheet}')
+            log.debug(rows)
+            for cell_value in rows:
+                log.debug(f'writing to {worksheet} ({row}, {col}) value - {cell_value}')
+                worksheet.cell(row=row, column=col).value = cell_value
+                col += 1
+            row += 1

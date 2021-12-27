@@ -155,7 +155,7 @@ class UpdaterStep:
             log.debug(f'writing to {worksheet}')
             log.debug(rows)
             for cell_value in rows:
-                # log.debug(f'writing to {worksheet} ({row}, {col}) value - {cell_value}')
+                log.debug(f'writing to {worksheet} ({row}, {col}) value - {cell_value}')
                 worksheet.cell(row=row, column=col).value = cell_value
                 col += 1
             row += 1

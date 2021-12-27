@@ -3,7 +3,7 @@ from configparser import ConfigParser
 
 
 def read_config(section):
-    filename = os.path.join("config.ini")
+    filename = os.path.join("Utils", "ConfigReader", "config.ini")
     parser = ConfigParser()
     parser.read(filename)
     config = {}
