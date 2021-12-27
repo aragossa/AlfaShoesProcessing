@@ -56,7 +56,7 @@ class ReportManager:
             step_updater.clean_root_dir(files=downloaded_files_clean)
             step_updater.upload_local_files(new_files=new_files)
 
-        # step_updater.remove_local_files()
+        step_updater.remove_local_files()
 
     def run(self):
         if len(self.args) == 1:

@@ -122,7 +122,7 @@ class RenewFlowUpdaterStep(UpdaterStep):
 
     def write_interval(self, worksheet, start_row, start_col, excel_data):
         log.debug('writing intervals values')
-        row = self.find_max_row(worksheet=worksheet, start_row=start_row)
+        row = self.find_max_row(worksheet=worksheet, start_row=start_row + 1)
         log.debug(f'found max row {row}')
         for rows in excel_data:
             log.debug(rows)
